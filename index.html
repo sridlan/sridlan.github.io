@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<title>BP Manager</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="w3.css"> -->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css">
+<style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: "Raleway", sans-serif
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.button {
+  /* background-color: #4CAF50; */
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  /* font-size: 16px; */
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button5 {
+    border-radius: 50%;
+    float: right;
+}
+
+.panel {
+  display: none;
+  padding: .50em .50em;
+  margin: 0 auto;
+  text-align: left;
+  font-size: large;
+  background-color: #FFFFFF;
+  /*text-shadow: 2px 2px 4px #6E6E6E;*/
+  /* border: 4px solid #5FBAAC; */
+  border-radius: 8px;
+  width: fit-content;
+  box-shadow: 5px 5px 6px #999;
+}
+.resetBtn{
+    display: none;
+}
+.segment{
+    display: flex;
+    margin: .8em auto;
+    box-sizing: border-box;
+    position: relative;
+    text-align: center;
+    /* box-shadow: 5px 5px 6px #999; */
+    
+}
+
+
+.segment input[type="radio"]{
+    display: none;
+}
+
+.segment label{
+    padding: .70em .10em;
+    flex: 1;
+    /* border: 1px solid #5FBAAC; */
+    /* border: 1px solid #6c7ae0; */
+    border: 1px solid #FFFFFF;
+    border-right: 0px;
+    /* background-color: #FFFFFF; */
+    background-color: clear;
+    /* transition: ease-in-out;
+    transition: 1s; */
+}
+.segment label.first{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.segment label.last{
+    border-right: 1px solid white;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.segment input:checked + label, .segment label:checked{
+    background-color: white;
+    opacity: .6;
+    color: black;
+    
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  /* border-bottom: 1px dotted black; */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: gray;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  /* top: 100%; */
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+</style>
+
+<body class="w3-light-grey">
+
+    <!-- Top container -->
+    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+        <!-- <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button> -->
+        <span class="w3-bar-item w3-right">BP App</span>
+    </div>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main" style="margin-top:43px;">
+
+        <!-- Header -->
+        <header class="w3-container" style="padding-top:22px">
+            <h5><b><i class="fa fa-dashboard"></i> BP Manager</b></h5>
+        </header>
+        <div class="w3-row-padding w3-margin-bottom">
+            <div class="w3-half">
+                <div class="w3-container w3-red w3-padding-16" style="box-shadow: 5px 5px 6px rgb(196, 219, 248);">
+                    <div class="w3-left"><i class="fa fa-user-md w3-xxxlarge"></i></div>
+                    <div style="text-align: right; display: inline-block;" class="w3-half"><button class="button button5" id="btn-1" name="Clinic or Home BP" value="a">Clinic</button></div>
+                    <div class="w3-right w3-third" style="text-align: right;">
+                        <h3>BP</h3>
+                    </div>
+                    <div class="w3-clear"></div>
+                    <div class="segment" name="seg-2">
+                        <input type="radio" name="seg-2" id="seg-2-1" value="a" onclick="updateScore(name, value);">
+                        <label for="seg-2-1" class="first" id="lab2-1">< 140/90</label>
+                        <input type="radio" name="seg-2" id="seg-2-2" value="b" onclick="updateScore(name, value);">
+                        <label for="seg-2-2" id="lab2-2">140/90 - 179/119</label>
+                        <input type="radio" name="seg-2" id="seg-2-3" value="c" onclick="updateScore(name, value);">
+                        <label for="seg-2-3" class="last" id="lab2-3">≥ 180/120</label>
+                    </div>           
+                </div>
+            </div>
+
+            <div class="w3-half">
+                <div class="w3-container w3-blue w3-padding-16">
+                    <div class="w3-left"><i class="far fa-hourglass w3-xxxlarge" style="color: white;"></i></div>
+                    <div class="w3-right">
+                        <h3>Age</h3>
+                    </div>
+                    <div class="w3-clear"></div>
+                    <div class="segment" name="seg-3">
+                        <input type="radio" name="seg-3" id="seg-3-1" value="a" onclick="updateScore(name, value)">
+                        <label for="seg-3-1" class="first" >< 40yrs</label>
+                        <input type="radio" name="seg-3" id="seg-3-2" value="b" onclick="updateScore(name, value)">
+                        <label for="seg-3-2">40 - 54 yrs</label>
+                        <input type="radio" name="seg-3" id="seg-3-3" value="c" onclick="updateScore(name, value)">
+                        <label for="seg-3-3">55 - 79</label>
+                        <input type="radio" name="seg-3" id="seg-3-4" value="d" onclick="updateScore(name, value)">
+                        <label for="seg-3-4" class="last">≥ 80</label>
+                    </div>         
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="w3-row-padding w3-margin-bottom">
+
+    <div class="w3-half">
+        <div class="w3-container w3-teal w3-padding-16">
+            <div class="w3-left"><i class="far fa-heart w3-xxxlarge"></i></div>
+            <div class="w3-right">
+                <h4>CVD Risk</h4>
+            </div>
+            <div class="w3-clear"></div>
+            <div class="segment" name="seg-4">
+                <input type="radio" name="seg-4" id="seg-4-1" value="a" onclick="updateScore(name, value)">
+                <label for="seg-4-1" class="first" >< 10%</label>
+                <input type="radio" name="seg-4" id="seg-4-2" value="b" onclick="updateScore(name, value)">
+                <label for="seg-4-2">≥ 10%</label>
+                <input type="radio" name="seg-4" id="seg-4-3" value="c" onclick="updateScore(name, value)">
+                <label for="seg-4-3" class="last">Not known</label>
+            </div> 
+        </div>
+    </div>
+
+     <div class="w3-half">
+        <!-- <span class="tooltiptext">CVD, renal disease, diabetes</span> -->
+            <div class="w3-container w3-deep-purple w3-padding-16">
+                <div class="w3-left"><i class="fa fa-capsules w3-xxxlarge"></i></div>
+                <div class="w3-right tooltip">
+                    <span class="tooltiptext">CVD, renal disease, diabetes</span>
+                    <h3>Chronic Disease</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <button class="button button5 w3-right" id="btn-5" name="seg-5" value="a">No</button>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>           
+
+    <br>
+    <button class="button" style="margin: 0 auto; display: block; border-radius: 50%; background-color: blueviolet; color: white;" onclick="bpClicked2();">Response</button>
+    <br>
+    <div class="panel" id="panel">
+        <p></p>
+    </div>
+    <br>
+    <button id="resetBtn" class="button resetBtn" onclick="window.location.reload()" style="margin: 0 auto; display: none; border-radius: 50%; background-color: teal; color: white;">Reset</button>
+
+    <footer style="text-align: center">
+        <p>	&#9400; Copyright Sridhar Lankey 2020</p>
+    </footer>
+
+<!-- End page content -->
+    </div>
+
+    <script>
+        var panel = document.getElementById("panel");
+        var resetBtn = document.getElementById("resetBtn");
+        var scoreMap = new Map([
+            [1, "a"],
+            [2, "X"],
+            [3, "X"],
+            [4, "X"],
+            [5, "a"],
+        ]);
+
+
+        var bptypeButton = document.getElementById("btn-1");
+        bptypeButton.onclick = function(){
+            if (bptypeButton.innerHTML == "Clinic"){
+                bptypeButton.innerHTML = "H/ABPM";
+                bptypeButton.value = "b";
+                document.getElementById("lab2-1").innerText = "< 135/85";   
+                document.getElementById("lab2-2").innerText = "135/85 - 149/94";   
+                document.getElementById("lab2-3").innerText = "≥ 150/95";
+                scoreMap.set(1, "b"); 
+                unSelectSegs();
+
+            } else if (bptypeButton.innerHTML == "H/ABPM"){
+                bptypeButton.innerHTML = "Clinic";
+                bptypeButton.value = "a";
+                document.getElementById("lab2-1").innerText = "< 140/90";   
+                document.getElementById("lab2-2").innerText = "140/90 - 179/119";   
+                document.getElementById("lab2-3").innerText = "≥ 180/120"; 
+                scoreMap.set(1, "a"); 
+                unSelectSegs();
+            }
+        }
+        var chrDisButton = document.getElementById("btn-5");
+        chrDisButton.onclick = function(){
+            if (chrDisButton.innerHTML == "No"){
+                chrDisButton.innerHTML = "Yes";
+                chrDisButton.value = "b";
+                chrDisButton.style.borderColor = "red";
+                updateScore("btn-5", "b");
+            } else if (chrDisButton.innerHTML == "Yes"){
+                chrDisButton.innerHTML = "No";
+                chrDisButton.value = "a";
+                chrDisButton.style.borderColor = "white";
+                updateScore("btn-5", "a");
+            }
+        }
+
+    var finalTotal = "1a2X3X4X5a";
+
+    var panel = document.getElementById("panel");
+
+    var respList = ["Check BP at least every 5 years and more often if close to 140/90 mmHg",
+        "Offer ABPM (or HBPM if ABPM is declined or not tolerated)<br> Investigate for target organ damage<br> Assess cardiovascular risk",
+        "Assess for target organ damage as soon as possible:<br> • Consider starting drug treatment immediately without ABPM/HBPM if target organ damage<br> • Repeat clinicBP in 7days if no target organ damage <br> Refer for same-day specialist review if:<br>• retinal haemorrhage or papilloedema (accelerated hypertension) or <br>• life-threatening symptoms or<br>• suspected pheochromocytoma",
+        "Check BP at least every 5 years and more often if close to 140/90 mmHg<br> If evidence of target organ damage, consider alternative causes",
+        "Offer lifestyle advice.<br> In addition, for the following groups:<br> Age >80 with clinic BP >150/90 mmHg: <br>• Consider drug treatment.<br> Age <80 with target organ damage, CVD, renal disease, diabetes or 10-year CVD risk ≥10%:<br> • Discuss starting drug treatment.<br>Age <60 with 10-year CVD risk <10%:<br>• Consider drug treatment.<br> Age <40:<br>• Consider specialist evaluation of secondary causes and assessment long- term benefits and risks of treatment",
+        "Offer lifestyle advice.<br>Age >80 and if clinic BP >150/90 mmHg:<br>• Consider drug treatment",
+        "Offer lifestyle advice.<br>In addition, for the following groups:<br>If age <80 with target organ damage, CVD, renal disease, diabetes or 10-year CVD risk ≥10%:<br> • Discuss starting drug treatment.",
+        "Offer lifestyle advice.<br>Age <80 with target organ damage, CVD, renal disease, diabetes or 10-year CVD risk ≥10%:<br> • Discuss starting drug treatment.",
+        "Offer lifestyle advice.<br>If age <60 with 10-year CVD risk <10%:<br>• Consider drug treatment.",
+        "Offer lifestyle advice.<br>Age <40:<br>• Consider specialist evaluation of secondary causes and assessment of long- term benefits and risks of treatment",
+        "Offer lifestyle advice and drug treatment.<br> Age <40:<br> • Consider specialist evaluation of secondary causes and assessment long- term benefits and risks of treatment",
+        "Offer lifestyle advice and drug treatment.",
+        "Offer lifestyle advice and drug treatment.<br>If age <40:<br> • Consider specialist evaluation of secondary causes and assessment long- term benefits and risks of treatment"
+    ];
+
+    function unSelectSegs(){
+        panel.innerHTML = null;
+        panel.style = "display: none";
+        resetBtn.style.display = "none";
+        document.getElementById("seg-2-1").checked = false;      
+        document.getElementById("seg-2-2").checked = false;      
+        document.getElementById("seg-2-3").checked = false; 
+        scoreMap.set(2, "X"); 
+        updateTotal();
+    }
+    function updateScore( name, value){
+        panel.innerHTML = null;
+        panel.style = "display: none";
+        resetBtn.style.display = "none";
+        var segScoreId =  "S" + name.slice(-1);
+        this.scoreMap.set(Number(name.slice(-1)), value);
+        console.log(this.scoreMap);
+        updateTotal()   
+    }
+
+function updateTotal(){
+    var total = "";
+    for(let entry of scoreMap.entries()){
+        total += entry;
+    }
+    total = total.replace (/,/g, "");
+    this.finalTotal = total;
+    console.log("Total: ",total);
+    console.log("Final Total: ", finalTotal);
+}
+function bpClicked2(){
+    var posX = finalTotal.indexOf("X");
+    if (posX === 3 ){
+        alert("Please input blood pressure");
+    }
+    resetBtn.style.display = "block";
+    var response = "";
+ 
+    if(finalTotal[1] === 'b'){
+        if ((finalTotal[3] === 'b') && (finalTotal[5] === 'd')){
+            response = "Stage H1a";
+            panel.style = "display: block";
+            panel.innerHTML = respList[5];
+        }
+        else if ((finalTotal[3] === 'b') && (/a|b|c/.test(finalTotal[5])) && (((/a|c|X/.test(finalTotal[7])) && (finalTotal[9] === 'b')) || ((finalTotal[7] === 'b') && (/a|X/.test(finalTotal[9])) ) || ((finalTotal[7] === 'b') && (finalTotal[9] === 'b')) ) ){
+            response = "Stage H1b";
+            panel.style = "display: block";
+            panel.innerHTML = respList[7];
+        }
+        else if ((finalTotal[3] === 'b') && (finalTotal[5] === 'c')){
+            response = "Stage H1c";
+            panel.style = "display: block";
+            panel.innerHTML = respList[6];
+        }  
+        else if ((finalTotal[3] === 'b') && (finalTotal[5] === 'b') && (/a|c|X/.test(finalTotal[7])) ){
+            response = "Stage H1c";
+            panel.style = "display: block";
+            panel.innerHTML = respList[8];
+        } 
+        else if ((finalTotal[3] === 'b') && (finalTotal[5] === 'a') ){
+            response = "Stage H1d";
+            panel.style = "display: block";
+            panel.innerHTML = respList[9];
+        } 
+        else if ((finalTotal[3] === 'c') && (finalTotal[5] === 'a') ){
+            response = "Stage H2a";
+            panel.style = "display: block";
+            panel.innerHTML = respList[10];
+        } 
+        else if ((finalTotal[3] === 'c') && (/b|c|d/.test(finalTotal[5])) ){
+            response = "Stage H2a";
+            panel.style = "display: block";
+            panel.innerHTML = respList[11];
+        } 
+        else if (finalTotal[3] === 'a' ){
+            response = "Stage H0";
+            panel.style = "display: block";
+            panel.innerHTML = respList[3];
+        } 
+        else if (finalTotal[3] === 'b' ){
+            response = "Stage H1";
+            panel.style = "display: block";
+            panel.innerHTML = respList[4];
+        } 
+        else if (finalTotal[3] === 'c' ){
+            response = "Stage H2";
+            panel.style = "display: block";
+            panel.innerHTML = respList[12];
+        } 
+    }
+    else if (finalTotal[1] === 'a'){
+        if (finalTotal[3] === 'a'){
+            response = "Stage 0";
+            panel.style = "display: block";
+            panel.innerHTML = respList[0];
+            panel.style.borderColor = "lightgreen"; 
+        }
+        else if (finalTotal[3] === 'b'){
+            response = "Stage 1";
+            panel.style = "display: block";
+            panel.innerHTML = respList[1];
+            panel.style.borderColor = "yellow";
+            panel.style.backgroundColor = "yellow";
+        }
+        else if (finalTotal[3] === 'c'){
+            response = "Stage 2";
+            panel.style = "display: block";
+            panel.innerHTML = respList[2];
+            panel.style.borderColor = "red";
+            panel.style.backgroundColor = "red";
+            panel.style.borderColor = "red";
+            panel.style.color = "white";
+        }
+    }
+}
+    </script>
+
+</body>
+
+</html>
